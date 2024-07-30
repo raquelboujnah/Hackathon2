@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/style_login.css">
+</head>
+<body>
+    <nav>
+        <i class="fa-solid fa-dumbbell" id="icon">icon</i><!--didn't mannage to find the link-->
+        <span> Fitness and Diet</span>
+    </nav>
+    <h1>Login</h1>
+    <div id="container">
+        <form id="loginForm" action="/fitness/login" method="POST">
+            <input type="text" name="username" id="username" placeholder="Username" required>
+            <input type="password" name="password" id="password" placeholder="Password" required>
+            <button type="submit" id="submitBtn" disabled>Login</button>
+        </form>
+        <p>Still not a member? <a href="/fitness/register">Register</a></p>
+        <p id="message"></p>
+    </div>
+    
+
+    <script>
+        const form = document.forms[0];
+        const inputs = form.querySelectorAll('input');
+        const submitBtn = document.getElementById('submitBtn');
+        const message = document.getElementById('message');
+
+        //set the button disable until all the form is full
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                const allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+                submitBtn.disabled = !allFilled;
+            });
+        });
+
+        //create a post to send to the backend the data and creating localStorage item
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            try {
+                const response = await fetch('/fitness/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    localStorage.setItem('userinfoLogin', JSON.stringify({username: result.username, intensity: result.intensity})); 
+                    localStorage.removeItem("usernameRegister")
+                    window.location.href = '/fitness/main';
+                } else {
+                    message.textContent = result.message || result.error;
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                message.textContent = 'An error occurred. Please try again later.';
+            }
+        });
+    </script>
+    
+    
+</body>
+</html>

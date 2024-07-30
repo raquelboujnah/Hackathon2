@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="/script_register.js" defer async></script>
+    <link rel="stylesheet" href="/style_register.css">
+</head>
+<body>
+    <nav>
+        <i class="fa-solid fa-dumbbell" id="icon">icon</i><!--didn't mannage to find the link-->
+        <span> Fitness and Diet</span>
+    </nav>
+    <h1>Register</h1>
+    <div id="container">
+        <form id="registerForm" action="/fitness/register" method="POST">
+            <input type="email" name="email" id="email" placeholder="Email" required><br>
+            <input type="text" name="username" id="username" placeholder="Username" required><br>
+            <input type="text" name="height" id="height" placeholder="Height" required><br>
+            <input type="text" name="weight" id="weight" placeholder="Weight" required><br>
+            <select name="gender" id="gender">
+                <option value="gender">Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select><br>
+            <input type="password" name="password" id="password" placeholder="Password" required><br>
+            <button type="submit" id="submitBtn" disabled>Register</button>
+        </form>
+        <p>You are already registered? <a href="/fitness/login">Login</a></p>
+        <p id="message"></p>
+        <div id="intensitySelectContainer"></div>
+    </div>
+    
+    
+</body>
+</html>
