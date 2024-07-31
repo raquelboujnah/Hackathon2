@@ -54,7 +54,7 @@
                 if (response.ok) {
                     localStorage.setItem('userinfoLogin', JSON.stringify({username: result.username, intensity: result.intensity})); 
                     localStorage.removeItem("usernameRegister")
-                    window.location.href = '/fitness/main';
+                    window.location.href = '/main';
                 } else {
                     message.textContent = result.message || result.error;
                 }
