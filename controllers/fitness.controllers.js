@@ -16,34 +16,29 @@ const mainFile = (req,res) => {
 }
 
 //user sign in, calculating BMI and return a message for displaying the BMI to the user while sign in, and username for updating intensity
-const userRegister = (req, res) => {
-    const {username, password, email, height, weight, gender} = req.body;
-    const heightMetre = height.toString() * 0.01
-    const BMI = weight / (heightMetre * heightMetre)
-    let bmistatus = ''
-    if (BMI < 18.5) {
-        bmistatus = "Underweight";
-    } else if (BMI >= 18.5 && BMI <= 24.9) {
-        bmistatus = "Normal";
-    } else if (BMI >= 25 && BMI <= 29.9) {
-        bmistatus = "Overweight";
-    } else if (BMI >= 30) {
-        bmistatus = "Obese";
-    }
+const userRegister = async (req, res) => {
+    const { username, password, email, height, weight, gender } = req.body;
+    const heightMetre = height * 0.01;
+    const BMI = weight / (heightMetre * heightMetre);
+    let bmistatus = '';
 
-    _userRegister(username, password, email, height, weight, gender, bmistatus)
-        .then(result => {
-            res.json({message: `Your bmi status is: ${bmistatus}`, username:result[0].username});
-        })
-        .catch((err) => {
-            console.log(err);
-            if (err.code === '23505') {
-                res.status(400).json({message: 'Username or email already exists. Please try another.'});
-            } else {
-                res.status(500).json({message: "Something went wrong. Please try again later."});
-            }
-        });
-}
+    if (BMI < 18.5) bmistatus = 'Underweight';
+    else if (BMI <= 24.9) bmistatus = 'Normal';
+    else if (BMI <= 29.9) bmistatus = 'Overweight';
+    else bmistatus = 'Obese';
+
+    try {
+        const result = await _userRegister(username, password, email, height, weight, gender, bmistatus);
+        res.json({ message: `Your BMI status is: ${bmistatus}`, username: result[0].username });
+    } catch (err) {
+        console.error('Registration error:', err);
+        if (err.code === '23505') {
+            res.status(400).json({ message: 'Username or email already exists. Please try another.' });
+        } else {
+            res.status(500).json({ message: 'Something went wrong. Please try again later.' });
+        }
+    }
+};
 
 //get the user intensity after submit and inserting his information, handling errors
 const userIntensity = (req,res) => {

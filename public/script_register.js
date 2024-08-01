@@ -40,7 +40,7 @@ function createIntensitySelect() {
         intensitySelect(event.target.value).then(() => {
             localStorage.setItem('intensityRegister', event.target.value); 
             localStorage.removeItem("userinfoLogin")
-            window.location.href = '/fitness/main';
+            window.location.href = '/main';
         });
     });
 }
